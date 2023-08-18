@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 引入开发版本的包 -->
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 创建容器 -->
+    <div id="app">
+        <!-- 编写准备渲染的代码 -->        
+        <h1> {{ msg }}</h1>
+        <a href="#">{{ count }}</a>   
+    </div>   
+
+    <script>
+        // 引入 VueJS核心包，在全局环境，就有了 Vue 核心函数
+        const app = new Vue({
+            // 通过 el 去配置选择器，指定 Vue 管理的是属于哪个盒子
+            el: '#app',
+            // 通过 data 提供数据
+            data: {
+                msg: '八嘎雅鹿',
+                count: 'Go Fuck'
+            }
+        })
+
+    </script>
+
+
+</body>
+
+</html>

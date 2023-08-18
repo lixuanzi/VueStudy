@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+
+        <ul>
+            <li v-for="(item, index) in bookList">
+                书名：{{item.bookName}}作者：{{item.author}}
+                <button @click="del(item.id)">删除</button>
+            </li>
+        </ul>
+    </div>
+    
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                bookList: [
+                    {id: 1, bookName: '西游记', author: '吴承恩'},
+                    {id: 2, bookName: '三国演义', author: '罗贯中'},
+                    {id: 3, bookName: '红楼梦', author: '曹雪芹'},
+                    {id: 4, bookName: '水浒传', author: '施耐庵'}
+                ]
+            },
+            methods: {
+                del(id){
+                    // filter 根据条件保留满足条件的对应项，同时返回一个新数组
+                    // 过滤(需要过滤的内容 => 条件)
+                    this.bookList=this.bookList.filter(item => item.id!==id)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

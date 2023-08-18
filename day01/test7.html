@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>欢迎来到购买饮料</h1>
+        <button @click="fnCOC(5)">可乐5元</button>
+        <button @click="fnCoff(10)">咖啡10元</button>
+        <hr>
+        <span>余额为￥{{ yuan }}元</span>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                yuan:100
+            },
+            methods: {
+                fnCOC(tmp){
+                    if(this.yuan>0){
+                        this.yuan = this.yuan-tmp;
+                    }else{
+                        alert('余额不足，当前余额为：'+this.yuan)
+                    }
+                    
+                },
+                fnCoff(tmp){
+                    if(this.yuan>0&&this.yuan-tmp>=0){
+                        this.yuan = this.yuan-tmp;
+                    }else{
+                        alert('余额不足，当前余额为：'+this.yuan)
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

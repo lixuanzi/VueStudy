@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 模板语法 插值表达式 渲染插值 -->
+        <p>{{ nickname }}</p>                   
+        <p>{{ nickname + ' Hello' }}</p>
+        <p>{{ nickname.toUpperCase() }}</p>
+        <p>{{ nickname }}是{{ age >= 18 ? '成年' : '未成年'}}</p>
+        <p>{{ nickname }}的一个朋友是{{ friend.name }}他的爱好是{{ friend.desc }}</p>
+    </div>
+
+    <script>
+        const app = new new Vue({
+            // 指定管理的容器
+            el: '#app',
+            data: {
+                nickname: 'Mathilda',
+                age: 18,
+                friend:{
+                    name: 'fuck',
+                    desc: '无fuck说'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

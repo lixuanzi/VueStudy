@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <button @click="fn">点击切换是否隐藏</button>
+        <h1 v-show="isShow"> 我是一个内容</h1>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                isShow: true
+            },
+            methods: {
+                fn(){
+                    console.log('fn被调用了',app.isShow);
+                    app.isShow = !app.isShow;
+                }
+            },
+        })
+    </script>
+</body>
+</html>

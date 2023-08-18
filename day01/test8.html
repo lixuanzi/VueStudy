@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <button v-show="index>0" @click="index--">上一页</button>
+        <img :src="list[index]" alt="Go Fuck" style="height: 500px;">
+        <button v-show="index<10" @click="index++">下一页</button>
+
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                index: 0,
+                list:[
+                    './img/img (1).jpg',
+                    './img/img (2).jpg',
+                    './img/img (3).jpg',
+                    './img/img (4).jpg',
+                    './img/img (5).jpg',
+                    './img/img (6).jpg',
+                    './img/img (7).jpg',
+                    './img/img (8).jpg',
+                    './img/img (9).jpg',
+                    './img/img (10).jpg',
+                    './img/img (11).jpg'
+                ]
+            }
+        })
+    </script>
+
+</body>
+
+</html>
