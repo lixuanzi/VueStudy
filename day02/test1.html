@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/index.css" />
+  <title>记事本</title>
+
+  <script src="../js/vue.js"></script>
+</head>
+
+<body>
+
+  <!-- 主体区域 -->
+  <section id="app">
+    <!-- 输入框 -->
+    <header class="header">
+      <h1>黑子任务</h1>
+      <input @keyup.enter="addTask" v-model="toDoName" placeholder="请输入任务" class="new-todo" />
+      <button class="add" @click="addTask">添加任务</button>
+    </header>
+    <!-- 列表区域 -->
+    <section class="main">
+      <ul class="todo-list">
+        <li class="todo" v-for="(item, index) in list" :key="item">
+          <div class="view">
+            <span class="index">{{index+1}} .</span> <label>{{item.name}}</label>
+            <button class="destroy" @click="destroy(item.id)"></button>
+          </div>
+        </li>
+      </ul>
+    </section>
+    <!-- 统计和清空 -->
+    <footer class="footer" v-show="list.length>0">
+      <!-- 统计 -->
+      <span class="todo-count">合 计:<strong> {{list.length}} </strong></span>
+      <!-- 清空 -->
+      <button class="clear-completed" @click="clearAll">
+        清空任务
+      </button>
+    </footer>
+  </section>
+
+  <!-- 底部 -->
+  <script>
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        toDoName: '',
+        list: [
+          { id: 1, name: '睡大觉' },
+          { id: 2, name: '吃软饭' },
+          { id: 3, name: '跑10圈' },
+          { id: 4, name: '学游泳' }
+        ]
+      },
+      methods: {
+        addTask() {
+          if (this.toDoName != '') {
+            this.list.unshift({
+              id: +new Date(),
+              name: this.toDoName
+            })
+            this.toDoName = ''
+          } else {
+            alert('任务不能为空！')
+            return
+          }
+        },
+        destroy(id) {
+          this.list = this.list.filter(item => item.id !== id)
+        },
+        clearAll() {
+          this.list = []
+        }
+      },
+    })
+
+  </script>
+</body>
+
+</html>

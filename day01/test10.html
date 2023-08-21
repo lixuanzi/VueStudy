@@ -12,7 +12,7 @@
     <div id="app">
 
         <ul>
-            <li v-for="(item, index) in bookList">
+            <li v-for="(item, index) in bookList" :key="item.id">
                 书名：{{item.bookName}}作者：{{item.author}}
                 <button @click="del(item.id)">删除</button>
             </li>

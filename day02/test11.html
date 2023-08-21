@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/inputnumber.css" />
+  <link rel="stylesheet" href="./css/index.css" />
+  <title>购物车</title>
+</head>
+
+<body>
+  <div class="app-container" id="app">
+    <!-- 顶部banner -->
+    <div class="banner-box"><img src="http://autumnfish.cn/static/fruit.jpg" alt="" /></div>
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+      <span>🏠</span>
+      /
+      <span>购物车</span>
+    </div>
+    <!-- 购物车主体 -->
+    <div class="main" v-if="fruitList.length > 0">
+      <div class="table">
+        <!-- 头部 -->
+        <div class="thead">
+          <div class="tr">
+            <div class="th">选中</div>
+            <div class="th th-pic">图片</div>
+            <div class="th">单价</div>
+            <div class="th num-th">个数</div>
+            <div class="th">小计</div>
+            <div class="th">操作</div>
+          </div>
+        </div>
+        <!-- 身体 -->
+        <div class="tbody">
+          <div class="tr" :class="{active: item.isChecked}" v-for="(item, index) in fruitList" :key="item.id">
+            <div class="td"><input type="checkbox" checked v-model="item.isChecked" /></div>
+            <div class="td"><img :src="item.icon" alt="" /></div>
+            <div class="td">{{item.price}}</div>
+            <div class="td">
+              <div class="my-input-number">
+                <!-- :disabled 为true时禁用点击事件-->
+                <button class="decrease" :disabled="item.num <=1 " @click="sub(item.id)"> - </button>
+                <span class="my-input__inner">{{item.num}}</span>
+                <button class="increase" @click="add(item.id)"> + </button>
+              </div>
+            </div>
+            <div class="td">{{item.price * item.num}}</div>
+            <div class="td"><button @click="del(item.id)">删除</button></div>
+          </div>
+        </div>
+      </div>
+      <!-- 底部 -->
+      <div class="bottom">
+        <!-- 全选 -->
+        <label class="check-all">
+          <input type="checkbox" v-model="isAll" />
+          全选
+        </label>
+        <div class="right-box">
+          <!-- 所有商品总价 -->
+          <span class="price-box">总价&nbsp;&nbsp;:&nbsp;&nbsp;¥&nbsp;<span class="price">{{ totalPrice }}</span></span>
+          <!-- 结算按钮 -->
+          <button class="pay">结算( {{ totalCount }} )</button>
+        </div>
+      </div>
+    </div>
+    <!-- 空车 -->
+    <div class="empty" v-else>🛒空空如也</div>
+  </div>
+  <script src="../js/vue.js"></script>
+  <script>
+    const defaultArr= [
+          {
+            id: 1,
+            icon: 'http://autumnfish.cn/static/火龙果.png',
+            isChecked: true,
+            num: 2,
+            price: 6,
+          },
+          {
+            id: 2,
+            icon: 'http://autumnfish.cn/static/荔枝.png',
+            isChecked: false,
+            num: 7,
+            price: 20,
+          },
+          {
+            id: 3,
+            icon: 'http://autumnfish.cn/static/榴莲.png',
+            isChecked: false,
+            num: 3,
+            price: 40,
+          },
+          {
+            id: 4,
+            icon: 'http://autumnfish.cn/static/鸭梨.png',
+            isChecked: true,
+            num: 10,
+            price: 3,
+          },
+          {
+            id: 5,
+            icon: 'http://autumnfish.cn/static/樱桃.png',
+            isChecked: false,
+            num: 20,
+            price: 34,
+          },
+        ]      
+    const app = new Vue({
+      el: '#app',
+      data: {
+        // 水果列表
+        fruitList: JSON.parse(localStorage.getItem('list')) || defaultArr,
+      },
+      methods: {
+        del(id) {
+          this.fruitList = this.fruitList.filter(item => item.id !== id)
+        },
+        sub(id) {
+          // 找出符合条件的项
+          const fruit = this.fruitList.find(item => item.id === id)
+          fruit.num--
+        },
+        add(id) {
+          // 找出符合条件的项
+          const fruit = this.fruitList.find(item => item.id === id)
+          fruit.num++
+        },
+      },
+      computed: {
+        isAll: {
+          get() {
+            // every 判断fruitList数组中是否所有元素都满足isChecked为true
+            return this.fruitList.every(item => item.isChecked)
+          },
+          set(value) {
+            console.log(value)
+            // 循环赋值
+            // this.fruitList.forEach(item => item.isChecked = value)
+            this.fruitList.forEach(function (item) {
+              item.isChecked = value
+            })
+          }
+        },
+        // 计算总数
+        totalCount() {
+          // 计数通常用reduce((阶段性值, 每一项) => 运算条件, 起始值)
+          return this.fruitList.reduce((sum, item) => {
+            if (item.isChecked) {
+              return sum + item.num
+            } else {
+              return sum
+            }
+          }, 0)
+        },
+        // 计算总价
+        totalPrice() {
+          return this.fruitList.reduce((sum, item) => {
+            if (item.isChecked) {
+              return sum + item.num * item.price
+            } else {
+              return sum
+            }
+          }, 0)
+        }
+      },
+      watch: {
+        fruitList: {
+          deep: true,
+          handler(newValue) {
+            // 将变换后的 newValue 存入本地（转化为 JSON 格式）
+            localStorage.setItem('list', JSON.stringify(newValue))
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
