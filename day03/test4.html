@@ -82,8 +82,8 @@
         <!-- 添加资产 -->
         <form class="my-form">
           <input v-model="name" type="text" class="form-control" placeholder="消费名称" />
-          <input v-model="price" type="text" class="form-control" placeholder="消费价格" />
-          <button type="button" class="btn btn-primary">添加账单</button>
+          <input v-model.number="price" type="text" class="form-control" placeholder="消费价格" />
+          <button @click="add" type="button" class="btn btn-primary">添加账单</button>
         </form>
 
         <table class="table table-hover">
@@ -100,7 +100,7 @@
               <td>{{ index + 1}}</td>
               <td>{{ item.name }}</td>
               <td :class="{ red: item.price >= 500 }">{{ item.price.toFixed(2) }}</td>
-              <td><a href="javascript:;">删除</a></td>
+              <td><a @click="del(item.id)" href="javascript:;">删除</a></td>
             </tr>
 
           </tbody>
@@ -113,12 +113,16 @@
       </div>
 
       <!-- 右侧图表 -->
-      <div class="echarts-box" id="main"></div>
+      <div class="echarts-box" id="main">
+
+
+      </div>
     </div>
   </div>
   <script src="../js/echarts.min.js"></script>
   <script src="../js/vue.js"></script>
   <script src="../js/axios.js"></script>
+  <script src="../js/echarts.js"></script>
   <script>
     /**
      * 接口文档地址：
@@ -138,21 +142,119 @@
         price: '',
       },
 
-
-      // 发起请求 在数据创建阶段 created , 赋值数据到 list
-      async created() {
-        const res = await axios.get('https://applet-base-api-t.itheima.net/bill', {
-          // 传入参数
-          params: {
-            creator: 'lixuanzi99313'
-          }
-        })
-        this.list = res.data.data
-      },
       computed: {
         totalPrice() {
           return this.list.reduce((sum, item) => sum + item.price, 0).toFixed(2)
-        }
+        },
+
+      },
+
+      methods: {
+        // 添加清单
+        async add() {
+          if (!this.name) {
+            alert('请输入正确的消费名称！')
+            return
+          }
+          if (typeof this.price !== 'number') {
+            alert('请输入正确的消费金额')
+            return
+          }
+
+          const res = await axios.post('https://applet-base-api-t.itheima.net/bill', {
+            creator: 'lixuanzi99313',
+            name: this.name,
+            price: this.price
+          })
+          // 重新渲染一次
+          this.getList()
+
+          this.name = ''
+          this.price = ''
+        },
+
+        async del(id) {
+          console.log(id)
+          const res = await axios.delete(`https://applet-base-api-t.itheima.net/bill/${id}`)
+
+          this.getList()
+        },
+
+        // 封装为函数，多次调用
+        async getList() {
+          const res = await axios.get('https://applet-base-api-t.itheima.net/bill', {
+            // 传入参数
+            params: {
+              creator: 'lixuanzi99313'
+            }
+          })
+          this.list = res.data.data;
+
+          // 更新图表
+          this.myChart.setOption({
+            // 数据项
+            series: [
+              {                
+                data:this.list.map(item => ({value: item.price, name:item.name}))              
+              }
+            ]
+          })
+        },
+      },
+      // 发起请求 在数据创建阶段 created , 赋值数据到 list
+
+      created() {
+        // const res = await axios.get('https://applet-base-api-t.itheima.net/bill', {
+        //   // 传入参数
+        //   params: {
+        //     creator: 'lixuanzi99313'
+        //   }
+        // })
+        // this.list = res.data.data
+        this.getList();
+      },
+      mounted() {
+        this.myChart = echarts.init(document.querySelector('#main'))
+        this.myChart.setOption({
+          // 标题
+          title: {
+            text: '黑子清单',
+            left: 'center'
+          },
+          // 提示框
+          tooltip: {
+            trigger: 'item'
+          },
+          // 图例
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          // 图属性
+          series: [
+            {
+              name: '黑子清单', // 提示框 标题
+              type: 'pie', // 图表类型
+              radius: '50%', //图表大小
+              data: [
+                { value: 1048, name: 'Search Engine' },
+                { value: 735, name: 'Direct' },
+                { value: 580, name: 'Email' },
+                { value: 484, name: 'Union Ads' },
+                { value: 300, name: 'Video Ads' }
+              ],
+              // 阴影
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        })
+
       }
     })
   </script>

@@ -319,3 +319,23 @@ boforeDestory（释放Vue以外的资源 延时器、定时器）:
 
 destoryed:
 
+## Echarts可视化图表
+
+官方地址：https://echarts.apache.org/examples/zh/editor.html?c=pie-simple
+
+官方文档：https://echarts.apache.org/handbook/zh/how-to/data/dynamic-data
+
+### 创建Vue项目
+
+- 安装node：https://nodejs.org/en/download
+- 配置环境变量及相关操作：https://blog.csdn.net/zimeng303/article/details/112167688
+- 具体创建步骤
+
+1. 全局安装（一次）：yarn global add @vue/cli 或 npm i @vue/cli -g
+2. 查看 Vue 版本：vue --version
+3. 创建架子项目：vue create peoject-name (项目名-不能用中文)
+4. 启动项目：yarn serve 或 npm run serve (找到package.json)
+
+### 目录结构
+
+![image-20230822220016263](https://img.ixuanzi.com/images/typora/image-20230822220016263.png)
